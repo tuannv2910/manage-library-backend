@@ -1,8 +1,13 @@
 package vn.banking.academy.processor;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.itextpdf.text.pdf.PdfReader;
 import okhttp3.*;
 import vn.banking.academy.model.ConversationBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AskWithChatGPT {
     /**
@@ -22,6 +27,7 @@ public class AskWithChatGPT {
             return;
         if (requirementsToken.isEmpty())
             return;
+        List<String> datas;
         try {
             ConversationBody conversation = new ConversationBody(conversationId, question);
             String payload = gson.toJson(conversation);
@@ -52,7 +58,13 @@ public class AskWithChatGPT {
                     .build();
             Response response = client.newCall(request).execute();
             String res = response.body().string();
-            System.out.println(response.body().string());
+            res = res.replace("data: [DONE]", "");
+            datas = new ArrayList<>(List.of(res.split("data: ")));
+            String lastResponse = datas.get(datas.size() - 1);
+            JsonObject lastResponseObject = new Gson().fromJson(lastResponse, JsonObject.class);
+            String rs = lastResponseObject.get("message").getAsJsonObject()
+                    .get("content").getAsJsonObject().get("parts").getAsJsonArray().get(0).getAsString();
+            System.out.println(rs);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -60,9 +72,21 @@ public class AskWithChatGPT {
 
     public static void main(String[] args) {
         ChatRequirementsToken token = new ChatRequirementsToken();
-        String requirementsToken = token.generator(accessToken, "45f57eb7-b170-468f-8bc6-198ed7f352b7");
+        String conversationId = "7e23ec7e-e57d-4798-b3f8-7d09f5bef696";
+        String requirementsToken = token.generator(accessToken, conversationId);
         AskWithChatGPT ask = new AskWithChatGPT();
-        ask.startQuestion("45f57eb7-b170-468f-8bc6-198ed7f352b7",
-                "Oke không sao", requirementsToken);
+        try {
+            PdfReader reader = new PdfReader("files/Tiểu-luận-thư-viện.pdf");
+            int pages = reader.getNumberOfPages();
+            for (int i = 1; i <= pages; i++) {
+                String questionText = ReadPDFFile.contentPage(reader, i);
+                ask.startQuestion(conversationId, questionText, requirementsToken);
+                System.out.println("question page >>> " + i + " success" );
+                Thread.sleep(10000);
+            }
+            reader.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
