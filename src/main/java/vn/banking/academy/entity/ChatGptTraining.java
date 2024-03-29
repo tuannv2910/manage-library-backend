@@ -22,5 +22,8 @@ public class ChatGptTraining {
     private String statusTrain;
 
     @Column(name = "session_chat")
-    private Integer sessionChat;
+    private String sessionChat;
+
+    @Column(name = "access_token")
+    private String accessToken;
 }

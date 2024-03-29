@@ -13,7 +13,7 @@ public class AskWithChatGPT {
     /**
      * accessToken của tài khoản chatGPT đấy
      */
-    public static String accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ0dWFubnZwaDE3NjU1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctcHVGdWJPWnpsYkZmMmluWEhIRkxVYm1lIiwidXNlcl9pZCI6InVzZXItNGNVbVF3NlBJVHdGVjRVUnNTOGpOM3VJIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhdXRoMHw2M2Q3NTg2OGJjOTY3OGNlYzFkNDU1NTkiLCJhdWQiOlsiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSIsImh0dHBzOi8vb3BlbmFpLm9wZW5haS5hdXRoMGFwcC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzEwNDI1ODgzLCJleHAiOjE3MTEyODk4ODMsImF6cCI6IlRkSkljYmUxNldvVEh0Tjk1bnl5d2g1RTR5T282SXRHIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSBtb2RlbC5yZWFkIG1vZGVsLnJlcXVlc3Qgb3JnYW5pemF0aW9uLnJlYWQgb3JnYW5pemF0aW9uLndyaXRlIG9mZmxpbmVfYWNjZXNzIn0.vlmDSPe10zeAK5oFDAElpXjkXG4hYdR0jChgPYzgoXa7OuoQ60d-lv2LYZ6ndnnDh6ojvbYamQUoQ9iDU4_XXXWpysACh2eLaWxggoAizErsMedptrUGizGTHsVm00ExqAcGynIB7wJlYM5kxIa6sxGv5mtYfpaxMW2Vhm8cV9Z6Ho0pfd1-7bEPV-zHJjvLPZTM2L2edDDKNx1VZt8k9V2HBk5dX3mbJbQvYrN8yYPO0i8_EfBmWpyaeIVR6Jtmc0Gfqh8ZPbPuaXphjia3AG8JFS_9_K7ykcJCUwyuj2kNQVVbDhybOhSuVaaM4TCrt6CKVadavKo3HnH8q6mxiw";
+    public static String accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ0dWFubnZwaDE3NjU1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctcHVGdWJPWnpsYkZmMmluWEhIRkxVYm1lIiwidXNlcl9pZCI6InVzZXItNGNVbVF3NlBJVHdGVjRVUnNTOGpOM3VJIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhdXRoMHw2M2Q3NTg2OGJjOTY3OGNlYzFkNDU1NTkiLCJhdWQiOlsiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSIsImh0dHBzOi8vb3BlbmFpLm9wZW5haS5hdXRoMGFwcC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzExMjkwMTgxLCJleHAiOjE3MTIxNTQxODEsImF6cCI6IlRkSkljYmUxNldvVEh0Tjk1bnl5d2g1RTR5T282SXRHIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCBtb2RlbC5yZWFkIG1vZGVsLnJlcXVlc3Qgb3JnYW5pemF0aW9uLnJlYWQgb3JnYW5pemF0aW9uLndyaXRlIG9mZmxpbmVfYWNjZXNzIn0.jJj0We5zjB-3VHppNUtnAnChLa1-OGrvHMKNEEJYOU3p0rn63AGwohjNDAa_1ELn6hLfYAvVWYotZtGu_f6ybAuMY4sW5XAyv3_ehxcX9UAwPXYcY0JUhC_ot5rTB_lcuvewAc4WnyKkENcBwjsviWCerwwGmapzd71mDZ0b1yC-zNqtAHtJIdg7f4uAFs6OeWkgTN7Z1HAqQ45JUkAd995zHRRfn3OyUv-npQrRFX2mFOUYtFEicRTybyQJ1G-rtsKPT3v3WT45nlnhylU59AdkU7KZ7bK34qyJFDXjBlf7tiyrgeEKL3-izLcdXHqIj2GHqRqV3UiNSR8QvkY8cA";
     Gson gson = new Gson();
 
     /**
@@ -72,21 +72,25 @@ public class AskWithChatGPT {
 
     public static void main(String[] args) {
         ChatRequirementsToken token = new ChatRequirementsToken();
-        String conversationId = "7e23ec7e-e57d-4798-b3f8-7d09f5bef696";
+        String conversationId = "60dd9bd7-1145-40d2-a209-80750d63ee32";
         String requirementsToken = token.generator(accessToken, conversationId);
         AskWithChatGPT ask = new AskWithChatGPT();
-        try {
-            PdfReader reader = new PdfReader("files/Tiểu-luận-thư-viện.pdf");
-            int pages = reader.getNumberOfPages();
-            for (int i = 1; i <= pages; i++) {
-                String questionText = ReadPDFFile.contentPage(reader, i);
-                ask.startQuestion(conversationId, questionText, requirementsToken);
-                System.out.println("question page >>> " + i + " success" );
-                Thread.sleep(10000);
-            }
-            reader.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            PdfReader reader = new PdfReader("files/Tiểu-luận-thư-viện.pdf");
+//            int pages = reader.getNumberOfPages();
+//            for (int i = 1; i <= pages; i++) {
+//                String questionText = ReadPDFFile.contentPage(reader, i);
+//                ask.startQuestion(conversationId, questionText, requirementsToken);
+//                System.out.println("question page >>> " + i + " success" );
+//                Thread.sleep(10000);
+//            }
+//            reader.close();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+
+        ask.startQuestion(conversationId, "ai là người viết ra báo cáo này ?",
+                requirementsToken);
+
     }
 }
