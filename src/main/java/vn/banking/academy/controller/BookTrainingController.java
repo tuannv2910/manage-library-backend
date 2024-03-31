@@ -21,6 +21,8 @@ public class BookTrainingController {
 
     @PostMapping("/conversation")
     public ResponseEntity<Object> conversation(@RequestBody ConversationRequest request) {
-        return null;
+        if (null == request)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(chatGptTrainingService.conversation(request), HttpStatus.OK);
     }
 }

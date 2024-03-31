@@ -20,13 +20,13 @@ public class AskWithChatGPT {
      * @param conversationId :id của phiên chat đấy
      * @param question       : đặt cho chatGPT
      */
-    public void startQuestion(String conversationId, String question, String requirementsToken) {
+    public String startQuestion(String conversationId, String question, String requirementsToken) {
         if (conversationId.isEmpty())
-            return;
+            return null;
         if (question.isEmpty())
-            return;
+            return null;
         if (requirementsToken.isEmpty())
-            return;
+            return null;
         List<String> datas;
         try {
             ConversationBody conversation = new ConversationBody(conversationId, question);
@@ -62,35 +62,11 @@ public class AskWithChatGPT {
             datas = new ArrayList<>(List.of(res.split("data: ")));
             String lastResponse = datas.get(datas.size() - 1);
             JsonObject lastResponseObject = new Gson().fromJson(lastResponse, JsonObject.class);
-            String rs = lastResponseObject.get("message").getAsJsonObject()
+            return lastResponseObject.get("message").getAsJsonObject()
                     .get("content").getAsJsonObject().get("parts").getAsJsonArray().get(0).getAsString();
-            System.out.println(rs);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        ChatRequirementsToken token = new ChatRequirementsToken();
-        String conversationId = "60dd9bd7-1145-40d2-a209-80750d63ee32";
-        String requirementsToken = token.generator(accessToken, conversationId);
-        AskWithChatGPT ask = new AskWithChatGPT();
-//        try {
-//            PdfReader reader = new PdfReader("files/Tiểu-luận-thư-viện.pdf");
-//            int pages = reader.getNumberOfPages();
-//            for (int i = 1; i <= pages; i++) {
-//                String questionText = ReadPDFFile.contentPage(reader, i);
-//                ask.startQuestion(conversationId, questionText, requirementsToken);
-//                System.out.println("question page >>> " + i + " success" );
-//                Thread.sleep(10000);
-//            }
-//            reader.close();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-
-        ask.startQuestion(conversationId, "ai là người viết ra báo cáo này ?",
-                requirementsToken);
-
+        return null;
     }
 }

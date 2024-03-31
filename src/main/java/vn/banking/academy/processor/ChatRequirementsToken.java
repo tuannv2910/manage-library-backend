@@ -3,6 +3,7 @@ package vn.banking.academy.processor;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import okhttp3.*;
+import org.springframework.data.util.Pair;
 
 public class ChatRequirementsToken {
 
@@ -10,8 +11,7 @@ public class ChatRequirementsToken {
      * @param accessToken : token của tài khoản chatGpt
      * @return : trả về token được generate để tiến hành chat
      */
-    public String generator(String accessToken, String conversationId) {
-        String token;
+    public Pair<String, Integer> generator(String accessToken, String conversationId) {
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
@@ -40,11 +40,12 @@ public class ChatRequirementsToken {
             Response response = client.newCall(request).execute();
             String res = response.body().string();
             JsonObject object = new Gson().fromJson(res, JsonObject.class);
-            token = object.get("token").getAsString();
+            if (response.code() == 400)
+                return Pair.of("", response.code());
+            return Pair.of(object.get("token").getAsString(), response.code());
         } catch (Exception ex) {
-            token = "";
             ex.printStackTrace();
+            return null;
         }
-        return token;
     }
 }
