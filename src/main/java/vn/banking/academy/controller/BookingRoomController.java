@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.banking.academy.dto.request.BookingRoomRequest;
 import vn.banking.academy.service.RoomService;
 
 import java.sql.Date;
@@ -24,7 +25,7 @@ public class BookingRoomController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<Object> checkOutBooking() {
-
+    public ResponseEntity<Object> checkOutBooking(@RequestBody BookingRoomRequest request) {
+        return new ResponseEntity<>(roomService.checkOut(request), HttpStatus.OK);
     }
 }
