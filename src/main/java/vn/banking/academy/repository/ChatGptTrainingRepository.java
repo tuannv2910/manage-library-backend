@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ChatGptTrainingRepository extends JpaRepository<ChatGptTraining, Long> {
     @Query("select new vn.banking.academy.dto.response.BookTrainingResponse(" +
-            "c.id, c.bookName,c.sessionChat) from ChatGptTraining c ")
+            "c.id, c.bookName,c.sessionChat,c.bookName) from ChatGptTraining c ")
     List<BookTrainingResponse> findAllBookTraining();
 
     ChatGptTraining findBySessionChat(String sessionChat);
