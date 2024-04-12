@@ -40,7 +40,7 @@ public class ChatRequirementsToken {
             Response response = client.newCall(request).execute();
             String res = response.body().string();
             JsonObject object = new Gson().fromJson(res, JsonObject.class);
-            if (response.code() == 400)
+            if (response.code() == 400 || response.code() == 401)
                 return Pair.of("", response.code());
             return Pair.of(object.get("token").getAsString(), response.code());
         } catch (Exception ex) {

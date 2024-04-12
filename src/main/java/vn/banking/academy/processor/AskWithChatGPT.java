@@ -4,23 +4,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.itextpdf.text.pdf.PdfReader;
 import okhttp3.*;
+import org.springframework.data.util.Pair;
 import vn.banking.academy.model.ConversationBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AskWithChatGPT {
-    /**
-     * accessToken của tài khoản chatGPT đấy
-     */
-    public static String accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ0dWFubnZwaDE3NjU1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctcHVGdWJPWnpsYkZmMmluWEhIRkxVYm1lIiwidXNlcl9pZCI6InVzZXItNGNVbVF3NlBJVHdGVjRVUnNTOGpOM3VJIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhdXRoMHw2M2Q3NTg2OGJjOTY3OGNlYzFkNDU1NTkiLCJhdWQiOlsiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSIsImh0dHBzOi8vb3BlbmFpLm9wZW5haS5hdXRoMGFwcC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzExMjkwMTgxLCJleHAiOjE3MTIxNTQxODEsImF6cCI6IlRkSkljYmUxNldvVEh0Tjk1bnl5d2g1RTR5T282SXRHIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCBtb2RlbC5yZWFkIG1vZGVsLnJlcXVlc3Qgb3JnYW5pemF0aW9uLnJlYWQgb3JnYW5pemF0aW9uLndyaXRlIG9mZmxpbmVfYWNjZXNzIn0.jJj0We5zjB-3VHppNUtnAnChLa1-OGrvHMKNEEJYOU3p0rn63AGwohjNDAa_1ELn6hLfYAvVWYotZtGu_f6ybAuMY4sW5XAyv3_ehxcX9UAwPXYcY0JUhC_ot5rTB_lcuvewAc4WnyKkENcBwjsviWCerwwGmapzd71mDZ0b1yC-zNqtAHtJIdg7f4uAFs6OeWkgTN7Z1HAqQ45JUkAd995zHRRfn3OyUv-npQrRFX2mFOUYtFEicRTybyQJ1G-rtsKPT3v3WT45nlnhylU59AdkU7KZ7bK34qyJFDXjBlf7tiyrgeEKL3-izLcdXHqIj2GHqRqV3UiNSR8QvkY8cA";
     Gson gson = new Gson();
 
     /**
      * @param conversationId :id của phiên chat đấy
      * @param question       : đặt cho chatGPT
      */
-    public String startQuestion(String conversationId, String question, String requirementsToken) {
+    public String startQuestion(String conversationId, String question, String requirementsToken, String accessToken) {
         if (conversationId.isEmpty())
             return null;
         if (question.isEmpty())
@@ -68,5 +65,26 @@ public class AskWithChatGPT {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public static void main(String[] args) throws Exception {
+        String accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ0dWFubnZwaDE3NjU1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctcHVGdWJPWnpsYkZmMmluWEhIRkxVYm1lIiwidXNlcl9pZCI6InVzZXItNGNVbVF3NlBJVHdGVjRVUnNTOGpOM3VJIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhdXRoMHw2M2Q3NTg2OGJjOTY3OGNlYzFkNDU1NTkiLCJhdWQiOlsiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSIsImh0dHBzOi8vb3BlbmFpLm9wZW5haS5hdXRoMGFwcC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzEyNTUwNTc5LCJleHAiOjE3MTM0MTQ1NzksImF6cCI6IlRkSkljYmUxNldvVEh0Tjk1bnl5d2g1RTR5T282SXRHIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSBtb2RlbC5yZWFkIG1vZGVsLnJlcXVlc3Qgb3JnYW5pemF0aW9uLnJlYWQgb3JnYW5pemF0aW9uLndyaXRlIG9mZmxpbmVfYWNjZXNzIn0.N3OVcUOdKeuuBVB4Et1mkOMONvyEe8S6YlNONJ0qUchzGAXnA9I2pnpVIKxywkqLv9qAGXcYVAavcAnIuGnPlest-QmwU4ijJ812fm5cbEmLG3IeJKd8taK4uuZ58YYob7mplXpv8YfDVSU6s-_ilItnQdsKk8BwA8L3AUB_nvLr5HsZoUtqY5Tk5jdT8fMLw-V9GOkUL135ThVSaxOOQb-UPAlwuBka41RLXXDoLzRmBGOb2878kbmm6aQmk4lqtDQWV_n0qrgDAeRrxLUdXnTJSOcBz8akZycL8htkAQl9ZUmTzM6gvSLXDeSyrDgCdj8_THbYWZH1gv5EPc85UQ";
+        ChatRequirementsToken token = new ChatRequirementsToken();
+        AskWithChatGPT chatGPT = new AskWithChatGPT();
+        String conversationId = "cac08c2d-6b29-4d2f-b4ab-67ee997943f7";
+        try {
+            PdfReader reader = new PdfReader("C:\\Users\\Admin\\Downloads\\ton-tu-binh-phap.pdf");
+            int pages = reader.getNumberOfPages();
+            for (int i = 15; i <= pages; i++) {
+                String questionText = "Nội dung của trang sách thứ  "  + i + " : " + ReadPDFFile.contentPage(reader, i);
+                Pair<String, Integer> generator1 = token.generator(accessToken, conversationId);
+                chatGPT.startQuestion(conversationId, questionText, generator1.getFirst(), accessToken);
+                System.out.println("question page >>> " + i + " success");
+                Thread.sleep(10000);
+            }
+            reader.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

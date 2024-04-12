@@ -18,23 +18,4 @@ public class ReadPDFFile {
         }
         return rs;
     }
-
-//    public static void main(String[] args) throws Exception {
-//        PdfReader reader = new PdfReader("files/Tiểu-luận-thư-viện.pdf");
-//        int pages = reader.getNumberOfPages();
-//        for (int i = 1; i <= pages; i++) {
-//            contentPage(reader, i);
-//        }
-//        reader.close();
-////        PdfReader reader = new PdfReader("files/Tiểu-luận-thư-viện.pdf");
-////        int pages = reader.getNumberOfPages();
-////        for (int i = 1; i <= pages; i++) {
-////            String text = PdfTextExtractor.getTextFromPage(reader, i);
-////            System.out.println("page index == " + i);
-////            System.out.println("content == " + text);
-////        }
-////        reader.close();
-//
-//
-//    }
 }

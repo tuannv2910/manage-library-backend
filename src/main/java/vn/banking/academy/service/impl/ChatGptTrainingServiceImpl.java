@@ -57,6 +57,6 @@ public class ChatGptTrainingServiceImpl implements ChatGptTrainingService {
             throw new SpringException(HttpStatus.BAD_GATEWAY, "Token đã hết hạn, vui lòng cập nhật qua telegram");
         }
         return new ConversationResponse(askWithChatGPT.startQuestion(obj.getSessionChat(),
-                request.conversation, generator.getFirst()));
+                request.conversation, generator.getFirst(), obj.getAccessToken()));
     }
 }
