@@ -13,8 +13,8 @@ public class BookingRoomRequest {
     private String roomCode;
     private List<String> timeFrames;
     private String userCode;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateBook;
     private String reason;
-    private Integer quality;
+    private Integer quantity;
 }

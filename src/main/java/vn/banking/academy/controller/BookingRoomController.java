@@ -28,4 +28,18 @@ public class BookingRoomController {
     public ResponseEntity<Object> checkOutBooking(@RequestBody BookingRoomRequest request) {
         return new ResponseEntity<>(roomService.checkOut(request), HttpStatus.OK);
     }
+
+    @GetMapping("/detail")
+    public ResponseEntity<Object> getBookingRoomDetails(
+            @RequestParam(name = "booking_id") Integer bookingId
+    ) {
+        return new ResponseEntity<>(roomService.getDetail(bookingId), HttpStatus.OK);
+    }
+
+    @GetMapping("/accept")
+    public ResponseEntity<Object> acceptBookingRoom(
+            @RequestParam(name = "booking_id") Integer bookingId
+    ) {
+        return new ResponseEntity<>(roomService.acceptBooking(bookingId), HttpStatus.OK);
+    }
 }

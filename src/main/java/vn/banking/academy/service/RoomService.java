@@ -8,5 +8,10 @@ import java.util.List;
 
 public interface RoomService {
     List<RoomResponse> getRoomByDate(Date date);
+
     Object checkOut(BookingRoomRequest request);
+
+    Object getDetail(Integer id);
+
+    Object acceptBooking(Integer id);
 }

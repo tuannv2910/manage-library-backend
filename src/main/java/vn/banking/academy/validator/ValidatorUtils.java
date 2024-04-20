@@ -34,14 +34,14 @@ public class ValidatorUtils {
         }
     }
 
-    public static void validNullOrEmpty(String fieldName, List<String> values) {
+    public static void validNullOrEmpty(List<String> values) {
         if (values == null || values.isEmpty()) {
             throw new SpringException
                     (
-                            SpringCode.BAD_REQUEST, NOT_BLANK + fieldName);
+                            SpringCode.BAD_REQUEST, NOT_BLANK );
         }
         for (String value : values) {
-            validNullOrEmpty(fieldName, value);
+            validNullOrEmpty("", value);
         }
     }
 
@@ -55,7 +55,7 @@ public class ValidatorUtils {
 
     public static void validOnlyCharacterAndNumber(String fieldName, String value) {
         if (!StringUtils.isOnlyCharacterAndNumber(value)) {
-            throw new SpringException(SpringCode.BAD_REQUEST,fieldName + INVALID);
+            throw new SpringException(SpringCode.BAD_REQUEST, fieldName + INVALID);
         }
     }
 
@@ -66,7 +66,7 @@ public class ValidatorUtils {
         for (String value : values) {
             if (!StringUtils.isOnlyCharacterAndNumber(value)) {
                 fieldName = fieldName.charAt(0) + fieldName.substring(1);
-                throw new SpringException(SpringCode.BAD_REQUEST,fieldName + INVALID);
+                throw new SpringException(SpringCode.BAD_REQUEST, fieldName + INVALID);
             }
         }
     }
@@ -182,12 +182,11 @@ public class ValidatorUtils {
         }
     }
 
-    public static void validLongValueMustBeMore(String fieldName, String value, Long minValue) {
-        Long percent = Long.valueOf(value);
-        if (percent < minValue) {
+    public static void validLongValueMustBeMore(int value, int minValue) {
+        if (value < minValue) {
             throw new SpringException
                     (
-                            SpringCode.BAD_REQUEST, fieldName + MUST_MORE + minValue);
+                            SpringCode.BAD_REQUEST, MUST_MORE + minValue);
         }
     }
 

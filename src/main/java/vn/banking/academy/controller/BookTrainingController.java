@@ -16,6 +16,7 @@ public class BookTrainingController {
 
     @GetMapping("/findAll")
     public ResponseEntity<Object> findAllBookTraining() {
+        System.out.println("ping findAll ok");
         return new ResponseEntity<>(chatGptTrainingService.getAllBookTraining(), HttpStatus.OK);
     }
 

@@ -21,7 +21,7 @@ public class DateUtils {
     }
 
     public static final String F_DDMMYYYYHHMMSS = "dd/MM/yyyy HH:mm:ss";
-    public static final String F_DDMMYYYY = "dd/MM/yyyy";
+    public static final String F_DDMMYYYY = "yyyy-MM-dd";
     public static final String F_MMYYYY = "MM/yyyy";
     public static final String DATE_TIME_FORMAT_VI = "dd-MM-yyyy HH:mm:ss";
     public static final String DATE_TIME_FORMAT_VI_OUTPUT = "yyyy-MM-dd HH:mm:ss";
