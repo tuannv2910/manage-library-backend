@@ -41,21 +41,6 @@ public class ChatGptTrainingServiceImpl implements ChatGptTrainingService {
         Pair<String, Integer> generator = chatRequirementsToken.generator(obj.getAccessToken(), obj.getSessionChat());
         if (generator == null)
             throw new SpringException(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
-
-        if (generator.getSecond() == 400) {
-            try {
-                TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-                AccessTokenBot accessTokenBot = new AccessTokenBot();
-                botsApi.registerBot(accessTokenBot);
-                SendMessage sendMessage = new SendMessage();
-                sendMessage.setChatId("2134649036");
-                sendMessage.setText("AccessToken cho phiên chat đã hết hạn. Vui lòng cập nhật accessToken qua phiên chat này.");
-                accessTokenBot.execute(sendMessage);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-            throw new SpringException(HttpStatus.BAD_GATEWAY, "Token đã hết hạn, vui lòng cập nhật qua telegram");
-        }
         return new ConversationResponse(askWithChatGPT.startQuestion(obj.getSessionChat(),
                 request.conversation, generator.getFirst(), obj.getAccessToken()));
     }
