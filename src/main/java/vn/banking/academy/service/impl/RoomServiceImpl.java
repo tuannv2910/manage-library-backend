@@ -25,6 +25,7 @@ import vn.banking.academy.validator.BookingRequestValidator;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static vn.banking.academy.conf.StaticField.timeFrameAvailable;
 import static vn.banking.academy.conf.StaticField.timeFrameBusy;
@@ -53,7 +54,7 @@ public class RoomServiceImpl implements RoomService {
             //b2 : lấy ra danh sách room_booking đã được đặt , những  Date_frame nào nằm  trong số booking_room đã được đặt thì sẽ ở trạng thái là busy
             List<Integer> roomBookingReject = roomBookingRepository.getAllRoomBookingByStatusAndDateBook(
                     BookingStatus.REJECT.toString(), date
-            ).stream().map(RoomBooking::getId).toList();
+            ).stream().map(RoomBooking::getId).collect(Collectors.toList());
 
             // khoi tao ra 1 list TimeFrame
             List<TimeFrame> timeFrames = new ArrayList<>(List.of(TimeFrame.values()));
@@ -77,7 +78,7 @@ public class RoomServiceImpl implements RoomService {
             }
             // còn lại thì các frame khác sẽ là available
             roomTimeFrameResponse.addAll(timeFrames.stream().map(timeFrame -> new RoomTimeFrameResponse(timeFrame.toString(),
-                    timeFrame.getStartTime(), timeFrame.getEndTime(), timeFrameAvailable)).toList());
+                    timeFrame.getStartTime(), timeFrame.getEndTime(), timeFrameAvailable)).collect(Collectors.toList()));
             roomResponse.setRoomTimeFrameStatus(roomTimeFrameResponse);
             roomResponses.add(roomResponse);
         }

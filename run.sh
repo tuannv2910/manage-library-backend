@@ -1,0 +1,1 @@
+java -jar /workspaces/manage-library-backend/target/datn-0.0.1-SNAPSHOT.jar
