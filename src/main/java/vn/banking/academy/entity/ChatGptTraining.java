@@ -1,7 +1,8 @@
 package vn.banking.academy.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
+
+import javax.persistence.*;
 
 @Getter
 @Entity
