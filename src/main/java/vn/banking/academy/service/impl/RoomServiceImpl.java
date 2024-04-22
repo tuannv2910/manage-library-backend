@@ -45,7 +45,7 @@ public class RoomServiceImpl implements RoomService {
             RoomResponse roomResponse = new RoomResponse();
             roomResponse.setRoomCode(room.getRoomCode());
             roomResponse.setRoomType(room.getRoomType());
-            roomResponse.setEquipment(new ArrayList<>(List.of(room.getEquipment().split(",".trim()))));
+            roomResponse.setEquipment(Arrays.asList(room.getEquipment().split(",".trim())));
             roomResponse.setLocation(room.getLocation());
             roomResponse.setQuantityAllowed(room.getQuantityAllowed());
             List<RoomTimeFrameResponse> roomTimeFrameResponse = new LinkedList<>();
@@ -57,7 +57,7 @@ public class RoomServiceImpl implements RoomService {
             ).stream().map(RoomBooking::getId).collect(Collectors.toList());
 
             // khoi tao ra 1 list TimeFrame
-            List<TimeFrame> timeFrames = new ArrayList<>(List.of(TimeFrame.values()));
+            List<TimeFrame> timeFrames = new ArrayList<>(Arrays.asList(TimeFrame.values()));
             //b1.1 : duyệt qua toàn bộ bookingDateFrame vào ngày được truyền vào
             for (RoomBookingDetail roomBookingDetail : bookingDateFrame) {
                 TimeFrame timeFrame = TimeFrame.getTimeFrame(roomBookingDetail.getTimeFrame());
@@ -132,7 +132,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Object getDetail(Integer id) {
         Optional<RoomBooking> roomBooking = roomBookingRepository.findById(id);
-        if (roomBooking.isEmpty()) {
+        if (!roomBooking.isPresent()) {
             throw new SpringException(HttpStatus.BAD_REQUEST, "không tồn tại booking với id = " + id);
         }
         List<RoomBookingDetail> allByRoomBookingId = roomBookingDetailRepository.findAllByRoomBookingId(id);
@@ -145,7 +145,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Object acceptBooking(Integer id) {
         Optional<RoomBooking> roomBooking = roomBookingRepository.findById(id);
-        if (roomBooking.isEmpty()) {
+        if (!roomBooking.isPresent()) {
             throw new SpringException(HttpStatus.BAD_REQUEST, "không tồn tại booking với id = " + id);
         }
         roomBooking.get().setStatus(BookingStatus.ACCEPT.toString());

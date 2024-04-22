@@ -38,7 +38,8 @@ public class ConversationBody {
          */
         public Content(String question) {
             this.content_type = "text";
-            this.parts = new ArrayList<>(List.of(question));
+            this.parts = new ArrayList<>();
+            this.parts.add(question);
         }
     }
 
@@ -73,11 +74,13 @@ public class ConversationBody {
     }
 
     /**
-     * @param question  : câu hỏi đặt cho chatGPT
+     * @param question : câu hỏi đặt cho chatGPT
      */
     public ConversationBody(String conversation_id, String question) {
         this.action = "next";
-        this.messages = new ArrayList<>(List.of(new Message(question)));
+        Message message = new Message(question);
+        this.messages = new ArrayList<>();
+        this.messages.add(message);
         this.conversation_id = conversation_id;
         this.parent_message_id = UUID.randomUUID().toString();
         this.model = "text-davinci-002-render-sha";

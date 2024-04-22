@@ -8,6 +8,7 @@ import org.springframework.data.util.Pair;
 import vn.banking.academy.model.ConversationBody;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AskWithChatGPT {
@@ -56,7 +57,7 @@ public class AskWithChatGPT {
             Response response = client.newCall(request).execute();
             String res = response.body().string();
             res = res.replace("data: [DONE]", "");
-            datas = new ArrayList<>(List.of(res.split("data: ")));
+            datas = new ArrayList<>(Arrays.asList(res.split("data: ")));
             String lastResponse = datas.get(datas.size() - 1);
             JsonObject lastResponseObject = new Gson().fromJson(lastResponse, JsonObject.class);
             return lastResponseObject.get("message").getAsJsonObject()
@@ -76,7 +77,7 @@ public class AskWithChatGPT {
             PdfReader reader = new PdfReader("C:\\Users\\Admin\\Downloads\\ton-tu-binh-phap.pdf");
             int pages = reader.getNumberOfPages();
             for (int i = 15; i <= pages; i++) {
-                String questionText = "Nội dung của trang sách thứ  "  + i + " : " + ReadPDFFile.contentPage(reader, i);
+                String questionText = "Nội dung của trang sách thứ  " + i + " : " + ReadPDFFile.contentPage(reader, i);
                 Pair<String, Integer> generator1 = token.generator(accessToken, conversationId);
                 chatGPT.startQuestion(conversationId, questionText, generator1.getFirst(), accessToken);
                 System.out.println("question page >>> " + i + " success");
