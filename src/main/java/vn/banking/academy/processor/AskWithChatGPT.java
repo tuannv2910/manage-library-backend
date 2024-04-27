@@ -23,8 +23,6 @@ public class AskWithChatGPT {
             return null;
         if (question.isEmpty())
             return null;
-        if (requirementsToken.isEmpty())
-            return null;
         List<String> datas;
         try {
             ConversationBody conversation = new ConversationBody(conversationId, question);
@@ -64,7 +62,7 @@ public class AskWithChatGPT {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return null;
+        return "co loi tra ve";
     }
 
     public static void main(String[] args) throws Exception {
