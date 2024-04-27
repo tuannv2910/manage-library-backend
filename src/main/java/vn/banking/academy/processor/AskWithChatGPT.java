@@ -60,8 +60,7 @@ public class AskWithChatGPT {
             datas = new ArrayList<>(Arrays.asList(res.split("data: ")));
             String lastResponse = datas.get(datas.size() - 1);
             JsonObject lastResponseObject = new Gson().fromJson(lastResponse, JsonObject.class);
-            return lastResponseObject.get("message").getAsJsonObject()
-                    .get("content").getAsJsonObject().get("parts").getAsJsonArray().get(0).getAsString();
+            return res;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
