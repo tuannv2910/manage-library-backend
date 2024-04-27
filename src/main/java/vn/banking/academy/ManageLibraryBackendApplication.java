@@ -10,12 +10,5 @@ import vn.banking.academy.bot.AccessTokenBot;
 public class ManageLibraryBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageLibraryBackendApplication.class, args);
-        TelegramBotsApi botsApi;
-        try {
-            botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new AccessTokenBot());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

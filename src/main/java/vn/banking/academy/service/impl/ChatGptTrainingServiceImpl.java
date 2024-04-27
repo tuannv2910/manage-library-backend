@@ -1,6 +1,8 @@
 package vn.banking.academy.service.impl;
 
+import com.google.gson.*;
 import lombok.AllArgsConstructor;
+import okhttp3.*;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,15 @@ import vn.banking.academy.processor.AskWithChatGPT;
 import vn.banking.academy.processor.ChatRequirementsToken;
 import vn.banking.academy.repository.ChatGptTrainingRepository;
 import vn.banking.academy.service.ChatGptTrainingService;
+import vn.banking.academy.utils.Choice;
+import vn.banking.academy.utils.StaticUtils;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -34,14 +43,43 @@ public class ChatGptTrainingServiceImpl implements ChatGptTrainingService {
 
     @Override
     public Object conversation(ConversationRequest request) {
-        ChatGptTraining obj = chatGptTrainingRepository.findBySessionChat(request.getSessionChat());
-        if (obj == null)
-            throw new SpringException(HttpStatus.BAD_GATEWAY, "Không tồn tại session chat tương ứng");
+        List<String> apiKeys = StaticUtils.apiKeys;
+        int index = new Random().nextInt(apiKeys.size());
+        try {
+            String url = "https://api.openai.com/v1/chat/completions";
+            String apiKey = "YOUR API KEY HERE";
+            String model = "gpt-3.5-turbo";
+                URL obj = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Authorization", "Bearer " + apiKeys.get(index));
+                connection.setRequestProperty("Content-Type", "application/json");
 
-        Pair<String, Integer> generator = chatRequirementsToken.generator(obj.getAccessToken(), obj.getSessionChat());
-        if (generator == null)
-            throw new SpringException(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
-        return new ConversationResponse(askWithChatGPT.startQuestion(obj.getSessionChat(),
-                request.conversation, generator.getFirst(), obj.getAccessToken()));
+                // The request body
+                String body = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + request.conversation + "\"}]}";
+                connection.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                writer.write(body);
+                writer.flush();
+                writer.close();
+
+                // Response from ChatGPT
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+
+                StringBuffer response = new StringBuffer();
+
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+                br.close();
+                JsonObject jsonObject = new Gson().fromJson(response.toString(), JsonObject.class);
+            Choice.Root root = new Gson().fromJson(jsonObject.toString(), Choice.Root.class);
+            return new ConversationResponse(root.choices.get(0).message.content);
+            } catch (Exception e) {
+            e.printStackTrace();
+                return new ConversationResponse("Co loi say ra !");
+            }
     }
 }
+
