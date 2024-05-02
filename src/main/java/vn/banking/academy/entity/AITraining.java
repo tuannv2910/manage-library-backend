@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "chat_gpt_training")
-public class ChatGptTraining {
+@Table(name = "ai_training")
+public class AITraining {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +18,6 @@ public class ChatGptTraining {
 
     @Column(name = "chat_gpt_email")
     private String chatGptEmail;
-
-    @Column(name = "status_train")
-    private String statusTrain;
 
     @Column(name = "session_chat")
     private String sessionChat;

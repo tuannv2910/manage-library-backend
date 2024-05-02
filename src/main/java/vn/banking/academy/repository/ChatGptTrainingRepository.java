@@ -5,20 +5,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.banking.academy.dto.response.BookTrainingResponse;
-import vn.banking.academy.entity.ChatGptTraining;
+import vn.banking.academy.entity.AITraining;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface ChatGptTrainingRepository extends JpaRepository<ChatGptTraining, Long> {
+public interface ChatGptTrainingRepository extends JpaRepository<AITraining, Long> {
     @Query("select new vn.banking.academy.dto.response.BookTrainingResponse(" +
-            "c.id, c.bookName,c.sessionChat) from ChatGptTraining c ")
+            "c.id, c.bookName,c.sessionChat) from AITraining c ")
     List<BookTrainingResponse> findAllBookTraining();
 
-    ChatGptTraining findBySessionChat(String sessionChat);
+    AITraining findBySessionChat(String sessionChat);
 
-    @Query("update ChatGptTraining c set c.accessToken =: accessToken")
+    @Query("update AITraining c set c.accessToken =: accessToken")
     void updateAccessToken(@Param("accessToken") String accessToken) ;
 
 }
