@@ -9,7 +9,7 @@ public class AccessTokenBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String accessToken = update.getMessage().getText();
-            System.out.println("msssage == " + accessToken);
+            System.out.println("message == " + accessToken);
         }
     }
 

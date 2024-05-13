@@ -2,9 +2,6 @@ package vn.banking.academy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import vn.banking.academy.bot.AccessTokenBot;
 
 @SpringBootApplication
 public class ManageLibraryBackendApplication {

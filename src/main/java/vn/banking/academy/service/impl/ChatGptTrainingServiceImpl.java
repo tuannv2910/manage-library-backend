@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import vn.banking.academy.dto.request.ConversationRequest;
 import vn.banking.academy.dto.response.BookTrainingResponse;
 import vn.banking.academy.dto.response.ConversationResponse;
+import vn.banking.academy.entity.AITraining;
 import vn.banking.academy.repository.ChatGptTrainingRepository;
 import vn.banking.academy.service.ChatGptTrainingService;
 
@@ -26,6 +27,7 @@ public class ChatGptTrainingServiceImpl implements ChatGptTrainingService {
 
     @Override
     public Object conversation(ConversationRequest req) {
+        AITraining bySessionChat = chatGptTrainingRepository.findBySessionChat(req.sessionChat);
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
@@ -36,7 +38,7 @@ public class ChatGptTrainingServiceImpl implements ChatGptTrainingService {
             Request request = new Request.Builder()
                     .url("https://api.chatpdf.com/v1/chats/message")
                     .method("POST", body)
-                    .addHeader("x-api-key", "sec_nkfRkwgr4jdiAQJ7h4vWxkFtaMQgmur6")
+                    .addHeader("x-api-key", bySessionChat.getSessionChat())
                     .addHeader("Content-Type", "application/json")
                     .build();
             Response response = client.newCall(request).execute();
