@@ -14,4 +14,5 @@ public interface RoomBookingDetailRepository extends JpaRepository<RoomBookingDe
                 " where rbd.dateBook =:date  and rbd.roomCode =: roomCode and rbd.roomCode =:roomCode")
         List<RoomBookingDetail> findAllByDateBookAndRoomCode(Date date,String roomCode);
         List<RoomBookingDetail> findAllByRoomBookingId(Integer bookingId);
+        Boolean existsRoomBookingDetailByTimeFrameAndDateBook(String timeFrame, Date dateBook);
 }

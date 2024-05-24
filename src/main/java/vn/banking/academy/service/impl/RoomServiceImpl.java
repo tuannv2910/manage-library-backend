@@ -20,10 +20,13 @@ import vn.banking.academy.repository.RoomBookingDetailRepository;
 import vn.banking.academy.repository.RoomBookingRepository;
 import vn.banking.academy.repository.RoomRepository;
 import vn.banking.academy.service.RoomService;
+import vn.banking.academy.utils.DateUtils;
 import vn.banking.academy.validator.BookingRequestValidator;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,6 +91,12 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Object checkOut(BookingRoomRequest request) {
         BookingRequestValidator.validate(request);
+        LocalDate currentDate = DateUtils.localDate();
+        LocalDate convertCurrentDate = request.getDateBook().toLocalDate();
+        // So sánh ngày hiện tại với thời gian được truyền vào
+        if (convertCurrentDate.isBefore(currentDate)) {
+            return "Ngày chọn phải sau hoặc bằng ngày hiện tại";
+        }
         // save room booking
         RoomBooking roomBooking = RoomBooking.builder().
                 createdDate(Timestamp.from(Instant.now()))
@@ -99,7 +108,12 @@ public class RoomServiceImpl implements RoomService {
                 .build();
         RoomBooking roomBookingSave = roomBookingRepository.save(roomBooking);
         // save room booking detail
-        request.getTimeFrames().forEach(timeFrame -> {
+        for (String timeFrame : request.getTimeFrames()) {
+            //validate time frame
+            Boolean exits = roomBookingDetailRepository.existsRoomBookingDetailByTimeFrameAndDateBook(timeFrame, request.getDateBook());
+            if (exits)
+                return "Đã có người đặt phòng với khung giờ và thời gian bạn đã chọn !";
+
             RoomBookingDetail roomBookingDetail = RoomBookingDetail.builder()
                     .roomBookingId(roomBookingSave.getId())
                     .timeFrame(timeFrame)
@@ -107,7 +121,7 @@ public class RoomServiceImpl implements RoomService {
                     .roomCode(request.getRoomCode())
                     .build();
             roomBookingDetailRepository.save(roomBookingDetail);
-        });
+        }
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             AccessTokenBot accessTokenBot = new AccessTokenBot();

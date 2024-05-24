@@ -265,4 +265,9 @@ public class DateUtils {
     public static Date localDateTimeToDate(LocalDateTime ldtValue) {
         return Timestamp.valueOf(ldtValue);
     }
+
+    public static LocalDate localDate() {
+        return LocalDate.now();
+    }
+
 }

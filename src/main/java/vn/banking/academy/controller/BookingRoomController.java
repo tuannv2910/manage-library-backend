@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.banking.academy.dto.request.BookingRoomRequest;
 import vn.banking.academy.service.RoomService;
+import vn.banking.academy.utils.DateUtils;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @RequestMapping("/api/booking/room")
 @RestController
@@ -21,6 +23,12 @@ public class BookingRoomController {
     ) {
         if (null == date)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        LocalDate currentDate = DateUtils.localDate();
+        LocalDate convertCurrentDate = date.toLocalDate();
+        // So sánh ngày hiện tại với thời gian được truyền vào
+        if (convertCurrentDate.isBefore(currentDate)) {
+            return new ResponseEntity<>("Ngày chọn phải sau hoặc bằng ngày hiện tại", HttpStatus.OK);
+        }
         return new ResponseEntity<>(roomService.getRoomByDate(date), HttpStatus.OK);
     }
 

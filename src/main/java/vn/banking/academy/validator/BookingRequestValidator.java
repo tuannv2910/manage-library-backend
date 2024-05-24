@@ -8,5 +8,6 @@ public class BookingRequestValidator {
         ValidatorUtils.validDateFormat(bookingRoomRequest.getDateBook().toString());
         ValidatorUtils.validLongValueMustBeMore(bookingRoomRequest.getQuantity(), 0);
         ValidatorUtils.validNullOrEmpty(bookingRoomRequest.getTimeFrames());
+
     }
 }

@@ -11,4 +11,6 @@ public class BookTrainingResponse {
     public Long id;
     public String bookName;
     public String sessionChat;
+    public String author;
+    public String image;
 }

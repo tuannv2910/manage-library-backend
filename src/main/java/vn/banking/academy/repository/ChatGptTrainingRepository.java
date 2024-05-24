@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ChatGptTrainingRepository extends JpaRepository<AITraining, Long> {
     @Query("select new vn.banking.academy.dto.response.BookTrainingResponse(" +
-            "c.id, c.bookName,c.sessionChat) from AITraining c ")
+            "c.id, c.bookName,c.sessionChat,c.author, c.image) from AITraining c ")
     List<BookTrainingResponse> findAllBookTraining();
 
     AITraining findBySessionChat(String sessionChat);

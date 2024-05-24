@@ -24,4 +24,8 @@ public class AITraining {
 
     @Column(name = "access_token")
     private String accessToken;
+    @Column(name = "author")
+    private String author;
+    @Column(name = "image")
+    private String image;
 }
