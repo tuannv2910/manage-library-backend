@@ -55,16 +55,18 @@ public class RoomServiceImpl implements RoomService {
             //b1 : lấy ra toàn bộ booking room đã được đặt vào ngày được truyền vào
             List<RoomBookingDetail> bookingDateFrame = roomBookingDetailRepository.findAllByDateBookAndRoomCode(date, room.getRoomCode());
             //b2 : lấy ra danh sách room_booking đã được đặt , những  Date_frame nào nằm  trong số booking_room đã được đặt thì sẽ ở trạng thái là busy
-            List<Integer> roomBookingReject = roomBookingRepository.getAllRoomBookingByStatusAndDateBook(
-                    BookingStatus.REJECT.toString(), date
+            List<String> statusList = new ArrayList<>();
+            statusList.add(BookingStatus.REJECT.toString());
+            statusList.add(BookingStatus.PENDING.toString());
+            List<Integer> roomBookingReject = roomBookingRepository.getAllRoomBookingByStatusAndDateBook(statusList
+                    , date
             ).stream().map(RoomBooking::getId).collect(Collectors.toList());
-
             // khoi tao ra 1 list TimeFrame
             List<TimeFrame> timeFrames = new ArrayList<>(Arrays.asList(TimeFrame.values()));
             //b1.1 : duyệt qua toàn bộ bookingDateFrame vào ngày được truyền vào
             for (RoomBookingDetail roomBookingDetail : bookingDateFrame) {
                 TimeFrame timeFrame = TimeFrame.getTimeFrame(roomBookingDetail.getTimeFrame());
-                if (null != timeFrame && !roomBookingReject.contains(roomBookingDetail.getRoomBookingId())) {
+                if (roomBookingReject.contains(roomBookingDetail.getRoomBookingId())) {
                     // chỗ này nếu như đã tồn tại trong db thì có nghĩa là đã được book
                     // check trường hợp frame này đã được book, và đơn book đã được accept
                     //thì trạng thái của frame sẽ là busy
@@ -106,14 +108,17 @@ public class RoomServiceImpl implements RoomService {
                 .status(BookingStatus.PENDING.toString())
                 .dateBook(request.getDateBook())
                 .build();
+        List<Integer> listRoomBookingFail = roomBookingRepository.getAllRoomBookingByStatusAndDateBook(Arrays.asList(BookingStatus.PENDING.toString(), BookingStatus.REJECT.toString()),
+                request.getDateBook()).stream().map(RoomBooking::getId).collect(Collectors.toList());
+        for (String timeFrame : request.getTimeFrames()) {
+            RoomBookingDetail roomBookingDetail = roomBookingDetailRepository.getRoomBookingDetailByTimeFrameAndDateBook(timeFrame, request.getDateBook());
+            if (roomBookingDetail != null && listRoomBookingFail.contains(roomBookingDetail.getRoomBookingId()))
+                return "Đã có người đặt phòng với khung giờ và thời gian bạn đã chọn !";
+        }
         RoomBooking roomBookingSave = roomBookingRepository.save(roomBooking);
         // save room booking detail
         for (String timeFrame : request.getTimeFrames()) {
             //validate time frame
-            Boolean exits = roomBookingDetailRepository.existsRoomBookingDetailByTimeFrameAndDateBook(timeFrame, request.getDateBook());
-            if (exits)
-                return "Đã có người đặt phòng với khung giờ và thời gian bạn đã chọn !";
-
             RoomBookingDetail roomBookingDetail = RoomBookingDetail.builder()
                     .roomBookingId(roomBookingSave.getId())
                     .timeFrame(timeFrame)

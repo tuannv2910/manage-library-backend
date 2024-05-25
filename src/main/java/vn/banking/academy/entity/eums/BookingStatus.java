@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum BookingStatus {
     PENDING("Đang chờ"),
+    EXPIRED("Hết hạn"),
     REJECT("Bị từ chối"),
     ACCEPT("Được duyệt");
     private final String status;
