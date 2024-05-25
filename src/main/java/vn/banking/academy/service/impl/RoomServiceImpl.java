@@ -56,7 +56,7 @@ public class RoomServiceImpl implements RoomService {
             List<RoomBookingDetail> bookingDateFrame = roomBookingDetailRepository.findAllByDateBookAndRoomCode(date, room.getRoomCode());
             //b2 : lấy ra danh sách room_booking đã được đặt , những  Date_frame nào nằm  trong số booking_room đã được đặt thì sẽ ở trạng thái là busy
             List<String> statusList = new ArrayList<>();
-            statusList.add(BookingStatus.REJECT.toString());
+            statusList.add(BookingStatus.ACCEPT.toString());
             statusList.add(BookingStatus.PENDING.toString());
             List<Integer> roomBookingReject = roomBookingRepository.getAllRoomBookingByStatusAndDateBook(statusList
                     , date
