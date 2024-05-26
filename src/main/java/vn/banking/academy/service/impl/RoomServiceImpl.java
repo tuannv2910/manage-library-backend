@@ -119,6 +119,7 @@ public class RoomServiceImpl implements RoomService {
             if (roomBookingDetail != null && listRoomBookingFail.contains(roomBookingDetail.getRoomBookingId()))
                 return "Đã có người đặt phòng với khung giờ và thời gian bạn đã chọn !";
         }
+        User uerBook = userRepository.getById(request.getUserCode());
         RoomBooking roomBookingSave = roomBookingRepository.save(roomBooking);
         // save room booking detail
         for (String timeFrame : request.getTimeFrames()) {
@@ -131,18 +132,18 @@ public class RoomServiceImpl implements RoomService {
                     .build();
             roomBookingDetailRepository.save(roomBookingDetail);
         }
-        User uerBook = userRepository.getById(request.getUserCode());
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             AccessTokenBot accessTokenBot = new AccessTokenBot();
             botsApi.registerBot(accessTokenBot);
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId("2134649036");
-            String message = "```\n" +
-                    "Mã booking  Người đặt\n" +
-                    roomBookingSave.getId() + " " + request.getUserCode() + "\n" + "   "
-                    + uerBook +
-                    "```";
+            String message =
+                    "Có đơn đặt phòng mới ! \n" +
+                            "Mã booking : " + roomBooking.getId() + "\n" +
+                            "Tên người đặt : " + uerBook.getFullName() + "\n" +
+                            "SDT : " + uerBook.getPhoneNumber() + "\n" +
+                            "Email : " + uerBook.getEmail() + "\n";
             sendMessage.setText(message);
             accessTokenBot.execute(sendMessage);
         } catch (Exception exception) {

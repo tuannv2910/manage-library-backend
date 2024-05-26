@@ -56,4 +56,19 @@ public class User {
     @OneToMany(mappedBy = "userBookCode")
     private Set<RoomBooking> roomBookings = new LinkedHashSet<>();
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", createdDate=" + createdDate +
+                ", email='" + email + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", otpCount='" + otpCount + '\'' +
+                ", passWord='" + passWord + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", status='" + status + '\'' +
+                ", updateDate=" + updateDate +
+                ", userName='" + userName + '\'' +
+                '}';
+    }
 }
