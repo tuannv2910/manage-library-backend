@@ -140,6 +140,10 @@ public class RoomServiceImpl implements RoomService {
             sendMessage.setChatId("2134649036");
             String message =
                     "Có đơn đặt phòng mới ! \n" +
+                            "Ngày đặt : " + request.getDateBook() + "\n" +
+                            "Lý do ; " + request.getReason() + "\n" +
+                            "số lượng : " + request.getQuantity() + "\n" +
+                            "Khung giờ : " + request.getTimeFrames().toString() + "\n" +
                             "Mã booking : " + roomBooking.getId() + "\n" +
                             "Tên người đặt : " + uerBook.getFullName() + "\n" +
                             "SDT : " + uerBook.getPhoneNumber() + "\n" +
