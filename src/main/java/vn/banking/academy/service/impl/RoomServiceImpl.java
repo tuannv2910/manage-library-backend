@@ -131,6 +131,7 @@ public class RoomServiceImpl implements RoomService {
                     .build();
             roomBookingDetailRepository.save(roomBookingDetail);
         }
+        User uerBook = userRepository.getById(request.getUserCode());
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             AccessTokenBot accessTokenBot = new AccessTokenBot();
@@ -139,7 +140,8 @@ public class RoomServiceImpl implements RoomService {
             sendMessage.setChatId("2134649036");
             String message = "```\n" +
                     "Mã booking  Người đặt\n" +
-                    roomBookingSave.getId() + " " + request.getUserCode() + "\n" +
+                    roomBookingSave.getId() + " " + request.getUserCode() + "\n" + "   "
+                    + uerBook +
                     "```";
             sendMessage.setText(message);
             accessTokenBot.execute(sendMessage);
