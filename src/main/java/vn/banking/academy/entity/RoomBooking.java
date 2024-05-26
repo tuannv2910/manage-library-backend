@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,4 +27,6 @@ public class RoomBooking {
     private Integer quantity;
     private String status;
     private Date dateBook;
+    @OneToMany(mappedBy = "roomBookingId")
+    private Set<RoomBookingDetail> roomBookingsDetail = new LinkedHashSet<>();
 }

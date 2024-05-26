@@ -10,23 +10,26 @@ import vn.banking.academy.bot.AccessTokenBot;
 import vn.banking.academy.dto.request.BookingRoomRequest;
 import vn.banking.academy.dto.response.RoomResponse;
 import vn.banking.academy.dto.response.RoomTimeFrameResponse;
+import vn.banking.academy.dto.response.RoomsBookedResponse;
 import vn.banking.academy.entity.Room;
 import vn.banking.academy.entity.RoomBooking;
 import vn.banking.academy.entity.RoomBookingDetail;
+import vn.banking.academy.entity.User;
 import vn.banking.academy.entity.eums.BookingStatus;
 import vn.banking.academy.entity.eums.TimeFrame;
 import vn.banking.academy.exception.SpringException;
 import vn.banking.academy.repository.RoomBookingDetailRepository;
 import vn.banking.academy.repository.RoomBookingRepository;
 import vn.banking.academy.repository.RoomRepository;
+import vn.banking.academy.repository.UserRepository;
 import vn.banking.academy.service.RoomService;
+import vn.banking.academy.utils.CopyUtils;
 import vn.banking.academy.utils.DateUtils;
 import vn.banking.academy.validator.BookingRequestValidator;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final RoomBookingDetailRepository roomBookingDetailRepository;
     private final RoomBookingRepository roomBookingRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<RoomResponse> getRoomByDate(Date date) {
@@ -105,7 +109,7 @@ public class RoomServiceImpl implements RoomService {
                 .userBookCode(request.getUserCode())
                 .reason(request.getReason())
                 .quantity(request.getQuantity())
-                .status(BookingStatus.PENDING.toString())
+                .status(BookingStatus.ACCEPT.toString())
                 .dateBook(request.getDateBook())
                 .build();
         List<Integer> listRoomBookingFail = roomBookingRepository.getAllRoomBookingByStatusAndDateBook(Arrays.asList(BookingStatus.PENDING.toString(), BookingStatus.REJECT.toString()),
@@ -161,17 +165,45 @@ public class RoomServiceImpl implements RoomService {
         return resp;
     }
 
-    @Override
-    public Object acceptBooking(Integer id) {
+    public Object rejectBooking(Integer id) {
         Optional<RoomBooking> roomBooking = roomBookingRepository.findById(id);
         if (!roomBooking.isPresent()) {
             throw new SpringException(HttpStatus.BAD_REQUEST, "không tồn tại booking với id = " + id);
         }
-        roomBooking.get().setStatus(BookingStatus.ACCEPT.toString());
+        roomBooking.get().setStatus(BookingStatus.REJECT.toString());
         roomBookingRepository.save(roomBooking.get());
         Map<String, Object> resp = new HashMap<>();
         resp.put("booking_id", id);
-        resp.put("message", "Booking accepted");
+        resp.put("message", "Booking canceled");
         return resp;
+    }
+
+    @Override
+    public Object getRoomBookedByUserId(String id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent())
+            return "không tồn tại user với id là " + id;
+
+        User user = userOptional.get();
+
+        RoomsBookedResponse roomsBookedResponse = new RoomsBookedResponse();
+        RoomsBookedResponse.UserBook userBook = new RoomsBookedResponse.UserBook();
+        CopyUtils.copy(user, userBook);
+        roomsBookedResponse.setUserBook(userBook);
+        user.getRoomBookings().forEach(roomBooking -> {
+            RoomsBookedResponse.RoomBookResponse roomBookResponse = new RoomsBookedResponse.RoomBookResponse();
+            CopyUtils.copy(roomBooking, roomBookResponse);
+            roomBooking.getRoomBookingsDetail().forEach(roomBookingDetail -> {
+                RoomsBookedResponse.RoomBookDetailResponse roomBookDetailResponse = new RoomsBookedResponse.RoomBookDetailResponse();
+                CopyUtils.copy(roomBookingDetail, roomBookDetailResponse);
+                Room room = roomRepository.getById(roomBookingDetail.getRoomCode());
+                RoomsBookedResponse.RoomResponse roomResponse = new RoomsBookedResponse.RoomResponse();
+                CopyUtils.copy(room, roomResponse);
+                roomBookDetailResponse.setRoomResponse(roomResponse);
+                roomBookResponse.getRoomBookDetailResponses().add(roomBookDetailResponse);
+            });
+            roomsBookedResponse.getRoomBookResponses().add(roomBookResponse);
+        });
+        return roomsBookedResponse;
     }
 }

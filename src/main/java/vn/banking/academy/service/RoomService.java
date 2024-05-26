@@ -13,5 +13,8 @@ public interface RoomService {
 
     Object getDetail(Integer id);
 
-    Object acceptBooking(Integer id);
+    Object rejectBooking(Integer id);
+
+    Object getRoomBookedByUserId(String id);
+
 }

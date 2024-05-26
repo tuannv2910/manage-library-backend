@@ -17,7 +17,7 @@ public class ScheduleRoomStatus {
     RoomBookingRepository roomBookingRepository;
 
 
-    @Scheduled(fixedDelay = 1000 * 60 * 15)
+
     public void scheduleTaskWithFixedDelay() {
         List<RoomBooking> bookingPending = roomBookingRepository.getAllRoomBookingByStatus();
         for (RoomBooking roomBooking : bookingPending) {

@@ -44,10 +44,16 @@ public class BookingRoomController {
         return new ResponseEntity<>(roomService.getDetail(bookingId), HttpStatus.OK);
     }
 
-    @GetMapping("/accept")
+    @GetMapping("/cancel")
     public ResponseEntity<Object> acceptBookingRoom(
             @RequestParam(name = "booking_id") Integer bookingId
     ) {
-        return new ResponseEntity<>(roomService.acceptBooking(bookingId), HttpStatus.OK);
+        return new ResponseEntity<>(roomService.rejectBooking(bookingId), HttpStatus.OK);
+    }
+
+    @GetMapping("list-booked")
+    public ResponseEntity<Object> getBookedRooms(
+            @RequestParam(name = "user_id") String userId) {
+        return new ResponseEntity<>(roomService.getRoomBookedByUserId(userId), HttpStatus.OK);
     }
 }
