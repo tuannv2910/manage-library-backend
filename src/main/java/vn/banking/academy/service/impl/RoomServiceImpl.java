@@ -43,6 +43,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomBookingDetailRepository roomBookingDetailRepository;
     private final RoomBookingRepository roomBookingRepository;
     private final UserRepository userRepository;
+    List<String> idChats = Arrays.asList("2134649036","6734331444","7088572688");
 
     @Override
     public List<RoomResponse> getRoomByDate(Date date) {
@@ -132,26 +133,28 @@ public class RoomServiceImpl implements RoomService {
                     .build();
             roomBookingDetailRepository.save(roomBookingDetail);
         }
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            AccessTokenBot accessTokenBot = new AccessTokenBot();
-            botsApi.registerBot(accessTokenBot);
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId("2134649036");
-            String message =
-                    "Có đơn đặt phòng mới ! \n" +
-                            "Ngày đặt : " + request.getDateBook() + "\n" +
-                            "Lý do ; " + request.getReason() + "\n" +
-                            "số lượng : " + request.getQuantity() + "\n" +
-                            "Khung giờ : " + request.getTimeFrames().toString() + "\n" +
-                            "Mã booking : " + roomBooking.getId() + "\n" +
-                            "Tên người đặt : " + uerBook.getFullName() + "\n" +
-                            "SDT : " + uerBook.getPhoneNumber() + "\n" +
-                            "Email : " + uerBook.getEmail() + "\n";
-            sendMessage.setText(message);
-            accessTokenBot.execute(sendMessage);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        for (String idChat : idChats) {
+            try {
+                TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+                AccessTokenBot accessTokenBot = new AccessTokenBot();
+                botsApi.registerBot(accessTokenBot);
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setChatId(idChat);
+                String message =
+                        "Có đơn đặt phòng mới ! \n" +
+                                "Ngày đặt : " + request.getDateBook() + "\n" +
+                                "Lý do ; " + request.getReason() + "\n" +
+                                "số lượng : " + request.getQuantity() + "\n" +
+                                "Khung giờ : " + request.getTimeFrames().toString() + "\n" +
+                                "Mã booking : " + roomBooking.getId() + "\n" +
+                                "Tên người đặt : " + uerBook.getFullName() + "\n" +
+                                "SDT : " + uerBook.getPhoneNumber() + "\n" +
+                                "Email : " + uerBook.getEmail() + "\n";
+                sendMessage.setText(message);
+                accessTokenBot.execute(sendMessage);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
         Map<String, Object> resp = new HashMap<>();
         resp.put("booking_id", roomBookingSave.getId());
